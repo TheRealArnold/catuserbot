@@ -105,10 +105,15 @@ async def bot_start(event):
         else:
             start_msg = f"Hey! 👤{mention},\
                         \nI am {my_mention}'s assistant bot.\
-                        \nYou can contact to my master from here."
+                        \nYou can contact to my master from here.\
+                        \n\nPowered by [Catuserbot](https://t.me/catuserbot)"
         buttons = [
             (
-                Button.url("Join Here", "https://t.me/subin_works")
+                Button.url("Repo", "https://github.com/sandy1709/catuserbot"),
+                Button.url(
+                    "Deploy",
+                    "https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack&template=https%3A%2F%2Fgithub.com%2FMr-confused%2Fcatpack",
+                ),
             )
         ]
     else:
@@ -226,6 +231,8 @@ async def bot_pms_edit(event):  # sourcery no-metrics
         if reply_to is not None:
             users = get_user_id(reply_to)
             result_id = 0
+            if users is None:
+                return
             for usr in users:
                 if event.id == usr.logger_id:
                     user_id = int(usr.chat_id)
