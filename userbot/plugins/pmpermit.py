@@ -485,7 +485,7 @@ __Let's make this smooth and let me know why you are here.__
 
 **Choose one of the following reasons why you are here:**"""
     buttons = [
-        (Button.inline(text="To enquire something.", data="to_enquire_something"),),
+        (Button.inline(text="To enquire about his bots.", data="to_enquire_something"),),
         (Button.inline(text="To request something.", data="to_request_something"),),
         (Button.inline(text="To chat with my master.", data="to_chat_with_my_master"),),
         (
@@ -514,7 +514,7 @@ async def on_plug_in_callback_query_handler(event):
         return await event.answer(text, cache_time=0, alert=True)
     text = """__Okay. Your request has been registered. Do not spam my master's inbox now. \
 My master is busy right now, When My master comes online he/she will check your message and ping you. \
-Then we can extend this conversation more but not right now.__"""
+Then we can extend this conversation more but not right now..\nYou can get an appointment from @subinps_bot 🤖__"""
     sqllist.add_to_list("pmenquire", event.query.user_id)
     try:
         PM_WARNS = sql.get_collection("pmwarns").json
@@ -534,7 +534,7 @@ async def on_plug_in_callback_query_handler(event):
         text = "Idoit this options for user who messages you. not for you"
         return await event.answer(text, cache_time=0, alert=True)
     text = """__Okay. I have notified my master about this. When he/she comes comes online\
- or when my master is free he/she will look into this chat and will ping you so we can have a friendly chat.__\
+ or when my master is free he/she will look into this chat and will ping you so we can have a friendly chat..\nYou can get an appointment from @subinps_bot 🤖__\
 
 **But right now please do not spam unless you wish to get blocked.**"""
     sqllist.add_to_list("pmrequest", event.query.user_id)
@@ -556,7 +556,7 @@ async def on_plug_in_callback_query_handler(event):
         text = "Idoit these options are for users who message you. not for you"
         return await event.answer(text, cache_time=0, alert=True)
     text = """__Yaa sure we can have a friendly chat but not right now. we can have this\
-some other time. Right now I am a little busy. when I come online and if I am free. I will ping you ,this is Damm sure.__"""
+some other time. Right now I am a little busy. when I come online and if I am free. I will ping you ,this is Damm sure..\nYou can get an appointment from @subinps_bot 🤖__"""
     sqllist.add_to_list("pmchat", event.query.user_id)
     try:
         PM_WARNS = sql.get_collection("pmwarns").json
