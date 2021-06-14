@@ -84,9 +84,9 @@ async def bot_broadcast(event):
             await asyncio.sleep(0.8)
         except FloodWaitError as e:
             await asyncio.sleep(e.seconds)
-        except (BadRequestError, ForbiddenError):
+        except (BadRequestError, ValueError, ForbiddenError):
             del_starter_from_db(int(user.user_id))
-        except Exception:
+        except Exception as e:
             LOGS.error(str(e))
             if BOTLOG:
                 await event.client.send_message(
