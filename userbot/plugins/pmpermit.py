@@ -200,7 +200,10 @@ async def do_pm_options_action(event, chat):
     except (ValueError, TypeError):
         MAX_FLOOD_IN_PMS = 6
     totalwarns = MAX_FLOOD_IN_PMS + 1
-    warns = PM_WARNS[str(chat.id)] + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
     remwarns = totalwarns - warns
     if str(chat.id) not in PM_WARNS:
         text = "__Select option from above message and wait. Don't spam my inbox, this is your last warning.__"
