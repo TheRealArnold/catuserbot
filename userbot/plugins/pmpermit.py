@@ -183,8 +183,6 @@ async def do_pm_options_action(event, chat):
         PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
     except AttributeError:
         PMMESSAGE_CACHE = {}
-    if str(chat.id) not in PM_WARNS:
-        PM_WARNS[str(chat.id)] = 0
     me = await event.client.get_me()
     mention = f"[{chat.first_name}](tg://user?id={chat.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
@@ -269,9 +267,7 @@ async def do_pm_enquire_action(event, chat):
     try:
         PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
     except AttributeError:
-        PMMESSAGE_CACHE = {}
-    if str(chat.id) not in PM_WARNS:
-        PM_WARNS[str(chat.id)] = 0
+        PMMESSAGE_CACHE = {}   
     me = await event.client.get_me()
     mention = f"[{chat.first_name}](tg://user?id={chat.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
@@ -289,7 +285,10 @@ async def do_pm_enquire_action(event, chat):
     except (ValueError, TypeError):
         MAX_FLOOD_IN_PMS = 6
     totalwarns = MAX_FLOOD_IN_PMS + 1
-    warns = PM_WARNS[str(chat.id)] + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
     remwarns = totalwarns - warns
     if str(chat.id) not in PM_WARNS:
         text = """__Hey! Have some patience. My master has not seen your message yet. \
@@ -360,8 +359,6 @@ async def do_pm_request_action(event, chat):
         PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
     except AttributeError:
         PMMESSAGE_CACHE = {}
-    if str(chat.id) not in PM_WARNS:
-        PM_WARNS[str(chat.id)] = 0
     me = await event.client.get_me()
     mention = f"[{chat.first_name}](tg://user?id={chat.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
@@ -379,7 +376,10 @@ async def do_pm_request_action(event, chat):
     except (ValueError, TypeError):
         MAX_FLOOD_IN_PMS = 6
     totalwarns = MAX_FLOOD_IN_PMS + 1
-    warns = PM_WARNS[str(chat.id)] + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
     remwarns = totalwarns - warns
     if str(chat.id) not in PM_WARNS:
         text = """__Hey have some patience. My master has not seen your message yet. \
@@ -450,8 +450,6 @@ async def do_pm_chat_action(event, chat):
         PMMESSAGE_CACHE = sql.get_collection("pmmessagecache").json
     except AttributeError:
         PMMESSAGE_CACHE = {}
-    if str(chat.id) not in PM_WARNS:
-        PM_WARNS[str(chat.id)] = 0
     me = await event.client.get_me()
     mention = f"[{chat.first_name}](tg://user?id={chat.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
@@ -469,7 +467,10 @@ async def do_pm_chat_action(event, chat):
     except (ValueError, TypeError):
         MAX_FLOOD_IN_PMS = 6
     totalwarns = MAX_FLOOD_IN_PMS + 1
-    warns = PM_WARNS[str(chat.id)] + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
     remwarns = totalwarns - warns
     if str(chat.id) not in PM_WARNS:
         text = """__Hey! I am busy right now I already asked you to wait know. After my work finishes. \
@@ -546,8 +547,6 @@ async def do_pm_spam_action(event, chat):
         PM_WARNS = sql.get_collection("pmwarns").json
     except AttributeError:
         PM_WARNS = {}
-    if str(chat.id) not in PM_WARNS:
-        PM_WARNS[str(chat.id)] = 0
     me = await event.client.get_me()
     mention = f"[{chat.first_name}](tg://user?id={chat.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
@@ -565,7 +564,10 @@ async def do_pm_spam_action(event, chat):
     except (ValueError, TypeError):
         MAX_FLOOD_IN_PMS = 6
     totalwarns = MAX_FLOOD_IN_PMS + 1
-    warns = PM_WARNS[str(chat.id)] + 1
+    if str(chat.id) not in PM_WARNS:
+        warns = 1
+    else:
+        warns = PM_WARNS[str(chat.id)] + 1
     remwarns = totalwarns - warns
     custompmblock = gvarstatus("pmblock") or None
     if custompmblock is not None:
