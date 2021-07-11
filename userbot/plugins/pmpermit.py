@@ -139,7 +139,7 @@ Don't spam my inbox. say reason and wait until my response.__"""
             )
             msg = await results[0].click(chat.id, reply_to=reply_to_id, hide_via=True)
         else:
-            PM_PIC = gvarstatus("PM_PIC")
+            PM_PIC = gvarstatus("pmpermit_pic")
             if PM_PIC:
                 CAT = [x for x in PM_PIC.split()]
                 PIC = list(CAT)
@@ -610,7 +610,7 @@ Now you can't do anything unless my master comes online and unblocks you.**"
         return
 
 
-@catub.cat_cmd(incoming=True, func=lambda e: e.is_private, edited=False)
+@catub.cat_cmd(incoming=True, func=lambda e: e.is_private, edited=False, forword=None)
 async def on_new_private_message(event):
     if gvarstatus("pmpermit") is None:
         return
@@ -632,7 +632,7 @@ async def on_new_private_message(event):
     await do_pm_permit_action(event, chat)
 
 
-@catub.cat_cmd(outgoing=True, func=lambda e: e.is_private, edited=False)
+@catub.cat_cmd(outgoing=True, func=lambda e: e.is_private, edited=False, forword=None)
 async def you_dm_other(event):
     if gvarstatus("pmpermit") is None:
         return
@@ -874,7 +874,7 @@ async def pmpermit_on(event):
 
 
 @catub.cat_cmd(
-    pattern="(a|approve)(?: |$)(.*)",
+    pattern="(a|approve)(?:\s|$)([\s\S]*)",
     command=("approve", plugin_category),
     info={
         "header": "To approve user to direct message you.",
@@ -950,7 +950,7 @@ async def approve_p_m(event):  # sourcery no-metrics
 
 
 @catub.cat_cmd(
-    pattern="(da|disapprove)(?: |$)(.*)",
+    pattern="(da|disapprove)(?:\s|$)([\s\S]*)",
     command=("disapprove", plugin_category),
     info={
         "header": "To disapprove user to direct message you.",
@@ -1001,7 +1001,7 @@ async def disapprove_p_m(event):
 
 
 @catub.cat_cmd(
-    pattern="block(?: |$)(.*)",
+    pattern="block(?:\s|$)([\s\S]*)",
     command=("block", plugin_category),
     info={
         "header": "To block user to direct message you.",
@@ -1057,7 +1057,7 @@ async def block_p_m(event):
 
 
 @catub.cat_cmd(
-    pattern="unblock(?: |$)(.*)",
+    pattern="unblock(?:\s|$)([\s\S]*)",
     command=("unblock", plugin_category),
     info={
         "header": "To unblock a user.",
@@ -1076,6 +1076,7 @@ async def unblock_pm(event):
         )
     if event.is_private:
         user = await event.get_chat()
+        reason = event.pattern_match.group(1)
     else:
         user, reason = await get_user_from_event(event)
         if not user:
