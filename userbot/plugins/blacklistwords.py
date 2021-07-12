@@ -7,6 +7,7 @@ from userbot import catub
 from ..core.managers import edit_or_reply
 from ..sql_helper import blacklist_sql as sql
 from ..utils import is_admin
+from ..helpers import media_type
 
 plugin_category = "admin"
 
@@ -18,6 +19,20 @@ async def on_new_message(event):
     catadmin = await is_admin(event.client, event.chat_id, event.client.uid)
     if not catadmin:
         return
+    if media_type(event) == 'Sticker':
+        file_id = event.file.id
+        if file_id in snips:
+            try:
+                await event.delete()
+            except Exception:
+                await event.client.send_message(
+                    BOTLOG_CHATID,
+                    f"I do not have DELETE permission in {get_display_name(await event.get_chat())}. \
+                    So removing blacklist words from this group",
+                )
+                for word in snips:
+                    sql.rm_from_blacklist(event.chat_id, word.lower())
+        return
     for snip in snips:
         pattern = r"( |^|[^\w])" + re.escape(snip) + r"( |$|[^\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
@@ -26,8 +41,8 @@ async def on_new_message(event):
             except Exception:
                 await event.client.send_message(
                     BOTLOG_CHATID,
-                    f"I do not have DELETE permission in {get_display_name(await event.get_chat())}.\
-                     So removing blacklist words from this group",
+                    f"I do not have DELETE permission in {get_display_name(await event.get_chat())}. \
+                    So removing blacklist words from this group",
                 )
                 for word in snips:
                     sql.rm_from_blacklist(event.chat_id, word.lower())
@@ -50,19 +65,28 @@ async def on_new_message(event):
 )
 async def _(event):
     "To add blacklist words to database"
-    text = event.pattern_match.group(1)
-    to_blacklist = list(
-        {trigger.strip() for trigger in text.split("\n") if trigger.strip()}
-    )
+    reply_msg = await event.get_reply_message()
+    if reply_msg and media_type(reply_msg) == 'Sticker':
+        file_id = reply_msg.file.id
+        sql.add_to_blacklist(event.chat_id, file_id)
+        await edit_or_reply(
+            event,
+            "Added sticker to the blacklist in the current chat"
+        )
+    else:
+        text = event.pattern_match.group(1)
+        to_blacklist = list(
+            {trigger.strip() for trigger in text.split("\n") if trigger.strip()}
+        )
 
-    for trigger in to_blacklist:
-        sql.add_to_blacklist(event.chat_id, trigger.lower())
-    await edit_or_reply(
-        event,
-        "Added {} triggers to the blacklist in the current chat".format(
-            len(to_blacklist)
-        ),
-    )
+        for trigger in to_blacklist:
+            sql.add_to_blacklist(event.chat_id, trigger.lower())
+        await edit_or_reply(
+            event,
+            "Added {} triggers to the blacklist in the current chat".format(
+                len(to_blacklist)
+            ),
+        )
 
 
 @catub.cat_cmd(
@@ -81,17 +105,26 @@ async def _(event):
 )
 async def _(event):
     "To Remove Blacklist Words from Database."
-    text = event.pattern_match.group(1)
-    to_unblacklist = list(
-        {trigger.strip() for trigger in text.split("\n") if trigger.strip()}
-    )
-    successful = sum(
-        bool(sql.rm_from_blacklist(event.chat_id, trigger.lower()))
-        for trigger in to_unblacklist
-    )
-    await edit_or_reply(
-        event, f"Removed {successful} / {len(to_unblacklist)} from the blacklist"
-    )
+    reply_msg = await event.get_reply_message()
+    if reply_msg and media_type(reply_msg) == 'Sticker':
+        file_id = reply_msg.file.id
+        sql.rm_from_blacklist(event.chat_id, file_id.lower())
+        await edit_or_reply(
+            event,
+            "Rmoved sticker to the blacklist in the current chat"
+        )
+    else:
+        text = event.pattern_match.group(1)
+        to_unblacklist = list(
+            {trigger.strip() for trigger in text.split("\n") if trigger.strip()}
+        )
+        successful = sum(
+            bool(sql.rm_from_blacklist(event.chat_id, trigger.lower()))
+            for trigger in to_unblacklist
+        )
+        await edit_or_reply(
+            event, f"Removed {successful} / {len(to_unblacklist)} from the blacklist"
+        )
 
 
 @catub.cat_cmd(
