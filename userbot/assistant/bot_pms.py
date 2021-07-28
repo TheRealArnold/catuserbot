@@ -107,10 +107,10 @@ async def bot_start(event):
                         \nI am {my_mention}'s assistant bot.\
                         \nYou can contact to my master from here.\
                         \nDont Spam Here, Dont Make My Master Angry.\
-                        \n\nPowered by [Arnold Schwarzenegger 🇮🇳](https://t.me/LEGEND_OF_TG)"
+                        \nPowered by [Arnold Schwarzenegger 🇮🇳](https://t.me/LEGEND_OF_TG)"
         buttons = [
             (
-                Button.url("Join Here", "https://t.me/LatestMoviesGroup2 ")
+                Button.url("Join Here", "https://t.me/LatestMoviesGroup2")
             )
         ]
     else:
