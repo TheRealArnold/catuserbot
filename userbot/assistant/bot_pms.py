@@ -103,19 +103,24 @@ async def bot_start(event):
                 my_mention=my_mention,
             )
         else:
-            start_msg = f"Hey! 👤{mention},\
-                        \nI am {my_mention}'s assistant bot.\
-                        \nYou can contact to my master from here.\
-                        \nDont Spam Here, Dont Make My Master Angry.\
+            start_msg = f"Hey 😏! {mention} 👋,\
+                        \nI am {my_mention}'s assistant bot 🔥.\
+                        
+                        \nYou can contact to my master from here 🙂.\
+                        \nGive Respect Take Respect,Dont Make My Master Angry.\
+                
                         \nPowered by [Arnold Schwarzenegger 🇮🇳](https://t.me/LEGEND_OF_TG)"
         buttons = [
             (
-                Button.url("Join Here", "https://t.me/LatestMoviesGroup2")
+            
+             Button.url("My Group", "https://t.me/LatestMoviesGroup2")
+             Button.url("My Channel". "https://t.me/LM_All_MoviesArchive")
+                
             )
         ]
     else:
-        start_msg = "Hey Master!\
-            \nHow can i help you ?"
+        start_msg = "Hey My Master 🔥💋!\
+            \nWhatYouWant🙂 ?"
         buttons = None
     try:
         await event.client.send_message(
